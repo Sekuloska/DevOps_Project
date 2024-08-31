@@ -2,26 +2,26 @@ version: '3.9'
 
 services:
   web:
-    build: .
+    image: ${{ secrets.DOCKERHUB_USERNAME }}/kiii-project:latest
     container_name: flask_app
     ports:
-      - "5000:5000" 
+      - "5000:5000"
     environment:
       - FLASK_APP=app.py
       - FLASK_ENV=development
-      - MONGO_URI=mongodb://mongo:27017/mydb  
+      - MONGO_URI=mongodb://mongo:27017/mydb
     depends_on:
       - mongo
     volumes:
-      - .:/app  
+      - .:/app
 
   mongo:
     image: mongo:latest
     container_name: mongo_db
     ports:
-      - "27017:27017"  
+      - "27017:27017"
     volumes:
-      - mongo_data:/data/db  
+      - mongo_data:/data/db
 
 volumes:
   mongo_data:
