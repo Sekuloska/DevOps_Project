@@ -38,9 +38,9 @@ jobs:
       - name: Copy application files to server
         uses: appleboy/scp-action@v0.1.2
         with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${{ SERVER_IP }}
+          username: ${{ SERVER_USER }}
+          key: ${{ SSH_PRIVATE_KEY }}
           source: "."
           target: "/home/azureuser/deployment/"
           port: 22
@@ -48,9 +48,9 @@ jobs:
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${{ SERVER_IP }}
+          username: ${{ SERVER_USER }}
+          key: ${{ SSH_PRIVATE_KEY }}
           port: 22
           script: |
             cd /home/azureuser/deployment/
