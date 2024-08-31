@@ -1,2 +1,1 @@
-update cd
-update cd1
+CD pipline
