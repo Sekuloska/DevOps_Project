@@ -1,7 +1,1 @@
-CDUPDATE!!!!!
-
-kika
-anasatijaaaaaaaaaaaaahahahahhahaha
-
-
-hahahhahaha
+DevOps
