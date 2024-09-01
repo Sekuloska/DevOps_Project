@@ -25,7 +25,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/devops_project-web:latest
+          tags: sekuloska/devops_project-web:latest
 
   deploy:
     runs-on: ubuntu-latest
