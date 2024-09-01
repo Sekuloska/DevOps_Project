@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   web:
     image: "${DOCKERHUB_USERNAME}/devops_project-web:latest"
