@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: devops-project-mongo-configmap
+  namespace: devops
+data:
+  MONGO_INITDB_DATABASE: mydb
+  MONGO_INITDB_ROOT_USERNAME: myuser
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: devops-project-mongo-secret
+  namespace: devops
+type: Opaque
+data:
+  password: bXlwYXNzd29yZA==  
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: devops-project-mongo-pvc
+  namespace: devops
+  labels:
+    app: mongo
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: devops-project-mongo
+  namespace: devops
+spec:
+  serviceName: devops-project-mongo-service
+  selector:
+    matchLabels:
+      app: mongo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mongo
+        namespace: devops
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:latest
+          envFrom:
+            - configMapRef:
+                name: devops-project-mongo-configmap
+          env:
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: devops-project-mongo-secret
+                  key: password
+          ports:
+            - containerPort: 27017
+              name: mongo-port
+          volumeMounts:
+            - name: devops-project-mongo-data
+              mountPath: /data/db
+      volumes:
+        - name: devops-project-mongo-data
+          persistentVolumeClaim:
+            claimName: devops-project-mongo-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-headless
+  namespace: devops
+spec:
+  clusterIP: None  # Овозможува StatefulSet да пристапува до секоја реплика посебно
+  ports:
+    - port: 27017
+      name: mongo
+  selector:
+    app: flask-project
